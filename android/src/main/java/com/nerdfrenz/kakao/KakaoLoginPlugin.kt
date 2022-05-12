@@ -25,6 +25,9 @@ class KakaoLoginPlugin : Plugin() {
         tokenInfos.putSafe("accessToken", token.accessToken);
         tokenInfos.putSafe("expiredAt", token.accessTokenExpiresAt.toString());
         tokenInfos.putSafe("refreshToken", token.refreshToken);
+        token.idToken?.let {
+               tokenInfos.putSafe("idToken", token.idToken);
+        }
         token.refreshTokenExpiresAt?.let {
             tokenInfos.putSafe("refreshTokenExpiresAt", it.toString());
         }

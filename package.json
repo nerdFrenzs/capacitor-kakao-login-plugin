@@ -1,6 +1,6 @@
 {
-  "name": "capacitor-kakaotalk-login",
-  "version": "0.1.6",
+  "name": "capacitor-kakao-login-plugin",
+  "version": "1.0.0",
   "description": "You can use this for Quasar-Capacitor",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -13,14 +13,14 @@
     "ios/Plugin/",
     "CapacitorKakaotalkLogin.podspec"
   ],
-  "author": "Tonylee",
+  "author": "Nerdfrenz",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Nerdfrenz/capacitor-kakaotalk-login.git"
+    "url": "git+https://github.com/nerdFrenzs/capacitor-kakao-login-plugin.git"
   },
   "bugs": {
-    "url": "https://github.com/Nerdfrenz/capacitor-kakaotalk-login/issues"
+    "url": "https://github.com/nerdFrenzs/capacitor-kakao-login-plugin/issues"
   },
   "keywords": [
     "capacitor",

@@ -22,6 +22,9 @@ public class KakaoLoginPlugin: CAPPlugin {
                 "refreshTokenExpiresIn": oauthToken.refreshTokenExpiresIn,
                 "tokenType": oauthToken.tokenType
             ]
+            if let scope = oauthToken.idToken {
+                oauthTokenInfos["idToken"] = oauthToken.idToken
+            }
             if let scope = oauthToken.scope {
                 oauthTokenInfos["scope"] = scope
             }
