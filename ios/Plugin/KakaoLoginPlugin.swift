@@ -8,6 +8,15 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 
+extension Encodable {
+    
+    var toDictionary : [String: Any]? {
+        guard let object = try? JSONEncoder().encode(self) else { return nil }
+        guard let dictionary = try? JSONSerialization.jsonObject(with: object, options: []) as? [String:Any] else { return nil }
+        return dictionary
+    }
+}
+
 @objc(KakaoLoginPlugin)
 public class KakaoLoginPlugin: CAPPlugin {
     
@@ -33,7 +42,20 @@ public class KakaoLoginPlugin: CAPPlugin {
             }
             return oauthTokenInfos
         }
-    
+    @objc public func getUserInfo(_ call: CAPPluginCall) -> Void {
+        UserApi.shared.me() {(user, error) in
+            if let error = error {
+                print(error)
+                call.reject("me() failed.")
+            }
+            else {
+                print("me() success.")
+                call.resolve([
+                    "value": user?.toDictionary as Any
+                ])
+            }
+        }
+    }
     @objc func goLogin(_ call: CAPPluginCall){
         if (UserApi.isKakaoTalkLoginAvailable()) {
             UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
@@ -77,22 +99,6 @@ public class KakaoLoginPlugin: CAPPlugin {
                 print("Logout success.")
             }
         }
-    }
-    
-    func getToken() -> Int64 {
-        var userId : Int64 = 0
-        UserApi.shared.me() {(user, error) in
-            if let error = error {
-                print(error)
-            }
-            else {
-                print("me() success.")
-                print(user?.id! as Any)
-                //do something
-                userId = (user?.id)!
-            }
-        }
-        return userId
     }
 }
 

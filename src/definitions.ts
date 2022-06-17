@@ -9,4 +9,5 @@ export interface KakaoLoginPlugin {
     "refreshTokenExpiresIn": string,
     "tokenType": string}>;
   goLogout(): Promise<any>;
+  getUserInfo(): Promise<{ value: any }>;
 }

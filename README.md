@@ -15,6 +15,7 @@ npx cap sync
 
 * [`goLogin()`](#gologin)
 * [`goLogout()`](#gologout)
+* [`getUserInfo()`](#getuserinfo)
 
 </docgen-index>
 
@@ -36,6 +37,17 @@ goLogin() => any
 
 ```typescript
 goLogout() => any
+```
+
+**Returns:** <code>any</code>
+
+--------------------
+
+
+### getUserInfo()
+
+```typescript
+getUserInfo() => any
 ```
 
 **Returns:** <code>any</code>

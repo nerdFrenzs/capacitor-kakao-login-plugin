@@ -1,7 +1,7 @@
 {
   "name": "capacitor-kakao-login-plugin",
-  "version": "1.0.0",
-  "description": "You can use this for Quasar-Capacitor",
+  "version": "1.0.7",
+  "description": "You can use this for Capacitor",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapacitorKakaotalkLogin.podspec"
+    "CapacitorKakaoLoginPlugin.podspec"
   ],
   "author": "Nerdfrenz",
   "license": "MIT",

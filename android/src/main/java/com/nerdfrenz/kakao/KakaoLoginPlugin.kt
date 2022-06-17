@@ -15,6 +15,10 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApi
 import com.kakao.sdk.user.UserApiClient
+import com.google.gson.Gson
+import org.json.JSONArray
+
+val gson = Gson()
 
 @CapacitorPlugin(name = "KakaoLoginPlugin")
 class KakaoLoginPlugin : Plugin() {
@@ -76,6 +80,27 @@ class KakaoLoginPlugin : Plugin() {
             UserApiClient.instance.loginWithKakaoTalk(context, callback = callback)
         } else {
             UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+        }
+    }
+    @PluginMethod
+    fun getUserInfo(call: PluginCall) {
+        // 사용자 정보 요청 (기본)
+        UserApiClient.instance.me { user, error ->
+            if (error != null) {
+                Log.e(TAG, "사용자 정보 요청 실패", error)
+                call.reject(error.toString());
+            }
+            else if (user != null) {
+                Log.i(TAG, "사용자 정보 요청 성공" +
+                        "\n회원번호: ${user.id}" +
+                        "\n이메일: ${user.kakaoAccount?.email}" +
+                        "\n닉네임: ${user.kakaoAccount?.profile?.nickname}" +
+                        "\n프로필사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}")
+                val userJsonData = JSObject(gson.toJson(user).toString())
+                val ret = JSObject()
+                ret.put("value", userJsonData)
+                call.resolve(ret)
+            }
         }
     }
     @PluginMethod
