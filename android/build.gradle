@@ -46,10 +46,10 @@ android {
 
 repositories {
        google()
-        jcenter()
-        maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-        mavenCentral()
+       jcenter()
+       maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
+       maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+       mavenCentral()
 }
 
 
@@ -62,5 +62,8 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
-    implementation "com.kakao.sdk:v2-user:2.10.1" // 카카오 로그인
+    implementation "com.kakao.sdk:v2-user:2.11.0" // 카카오 로그인
+    implementation "com.kakao.sdk:v2-talk:2.11.0" // 친구, 메시지(카카오톡)
+    implementation "com.kakao.sdk:v2-story:2.11.0" // 카카오스토리
+    implementation "com.kakao.sdk:v2-share:2.11.0" // 메시지(카카오톡 공유)
 }

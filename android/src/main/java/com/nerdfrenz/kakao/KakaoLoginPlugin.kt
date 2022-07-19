@@ -16,6 +16,12 @@ import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApi
 import com.kakao.sdk.user.UserApiClient
 import com.google.gson.Gson
+import com.kakao.sdk.template.model.FeedTemplate
+import com.kakao.sdk.share.ShareClient
+import com.kakao.sdk.share.model.SharingResult
+import com.kakao.sdk.template.model.Button
+import com.kakao.sdk.template.model.Content
+import com.kakao.sdk.template.model.Link
 import org.json.JSONArray
 
 val gson = Gson()
@@ -38,41 +44,16 @@ class KakaoLoginPlugin : Plugin() {
         return tokenInfos
     }
 
-    fun parseError(error: Throwable): JSObject? {
-        var errorInfos = JSObject();
-        var clientError = (error as? ClientError)
-        if (clientError != null) {
-            errorInfos.putSafe("success", false);
-            errorInfos.putSafe("errorType", "ClientError");
-            errorInfos.putSafe("errorMessage", clientError.msg);
-            return errorInfos
-        }
-        var authError = (error as? AuthError)
-        if (authError != null) {
-            errorInfos.putSafe("success", false);
-            errorInfos.putSafe("errorType", "AuthError");
-            errorInfos.putSafe("errorMessage", authError.msg);
-            return errorInfos
-        }
-        var apiError = (error as? ApiError)
-        if (apiError != null) {
-            errorInfos.putSafe("success", false);
-            errorInfos.putSafe("errorType", "ApiError");
-            errorInfos.putSafe("errorMessage", apiError.msg);
-            errorInfos.putSafe("errorCode", apiError.statusCode);
-            return errorInfos
-        }
-        return null
-    }
-
     @PluginMethod
     fun goLogin(call: PluginCall) {
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
-                call.resolve(parseError(error));
+                call.reject(error.toString());
             }
             else if (token != null) {
                 call.resolve(parseToken(token))
+            } else {
+                call.reject("no_data")
             }
         }
 
@@ -81,6 +62,34 @@ class KakaoLoginPlugin : Plugin() {
         } else {
             UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
         }
+    }
+    @PluginMethod
+    fun sendLinkFeed(call: PluginCall) {
+        val imageLinkUrl = call.getString("imageLinkUrl")
+        val imageUrl: String = if (call.getString("imageUrl") === null) "" else call.getString("imageUrl")!!
+        val title: String = if (call.getString("title") === null) "" else call.getString("title")!!
+        val description = call.getString("description")
+        val buttonTitle: String = if (call.getString("buttonTitle") === null) "" else call.getString("buttonTitle")!!
+        val imageWidth: Int? = call.getInt("imageWidth")
+        val imageHeight: Int? = call.getInt("imageHeight")
+
+        val link = Link(imageLinkUrl, imageLinkUrl, null, null)
+        val content = Content(title, imageUrl, link, description, imageWidth, imageHeight)
+        val buttons = ArrayList<Button>()
+        buttons.add(Button(buttonTitle, link))
+        val feed = FeedTemplate(content, null, null, buttons)
+        ShareClient.instance
+            .shareDefault(
+                    activity,
+                    feed
+            ) { linkResult: SharingResult?, error: Throwable? ->
+                if (error != null) {
+                    call.reject("kakao link failed: " + error.toString())
+                } else if (linkResult != null) {
+                    activity.startActivity(linkResult.intent)
+                }
+                call.resolve()
+            }
     }
     @PluginMethod
     fun getUserInfo(call: PluginCall) {

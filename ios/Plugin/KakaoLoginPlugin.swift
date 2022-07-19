@@ -1,7 +1,12 @@
 import Foundation
-import KakaoSDKUser
-import KakaoSDKAuth
 import Capacitor
+import KakaoSDKUser
+import KakaoSDKCommon
+import KakaoSDKShare
+import KakaoSDKTemplate
+import KakaoSDKAuth
+import KakaoSDKTalk
+
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -19,29 +24,71 @@ extension Encodable {
 
 @objc(KakaoLoginPlugin)
 public class KakaoLoginPlugin: CAPPlugin {
-    
     func parseOAuthToken(oauthToken: OAuthToken) -> [String: Any] {
-            var oauthTokenInfos: [String: Any] = [
-                "success": true,
-                "accessToken": oauthToken.accessToken,
-                "expiredAt": oauthToken.expiredAt,
-                "expiresIn": oauthToken.expiresIn,
-                "refreshToken": oauthToken.refreshToken,
-                "refreshTokenExpiredAt": oauthToken.refreshTokenExpiredAt,
-                "refreshTokenExpiresIn": oauthToken.refreshTokenExpiresIn,
-                "tokenType": oauthToken.tokenType
-            ]
-            if let scope = oauthToken.idToken {
-                oauthTokenInfos["idToken"] = oauthToken.idToken
-            }
-            if let scope = oauthToken.scope {
-                oauthTokenInfos["scope"] = scope
-            }
-            if let scopes = oauthToken.scopes {
-                oauthTokenInfos["scopes"] = scopes
-            }
-            return oauthTokenInfos
+        var oauthTokenInfos: [String: Any] = [
+            "success": true,
+            "accessToken": oauthToken.accessToken,
+            "expiredAt": oauthToken.expiredAt,
+            "expiresIn": oauthToken.expiresIn,
+            "refreshToken": oauthToken.refreshToken,
+            "refreshTokenExpiredAt": oauthToken.refreshTokenExpiredAt,
+            "refreshTokenExpiresIn": oauthToken.refreshTokenExpiresIn,
+            "tokenType": oauthToken.tokenType
+        ]
+        if oauthToken.idToken != nil {
+            oauthTokenInfos["idToken"] = oauthToken.idToken
         }
+        if let scope = oauthToken.scope {
+            oauthTokenInfos["scope"] = scope
+        }
+        if let scopes = oauthToken.scopes {
+            oauthTokenInfos["scopes"] = scopes
+        }
+        return oauthTokenInfos
+    }
+
+    @objc public func sendLinkFeed(_ call: CAPPluginCall) -> Void {
+
+        let title = call.getString("title") ?? ""
+        let description = call.getString("description") ?? ""
+        let imageUrl = call.getString("imageUrl") ?? ""
+        let imageLinkUrl = call.getString("imageLinkUrl") ?? ""
+        let buttonTitle = call.getString("buttonTitle") ?? ""
+        let imageWidth: Int? = call.getInt("imageWidth")
+        let imageHeight: Int? = call.getInt("imageHeight")
+
+
+
+        let link = Link(webUrl: URL(string:imageLinkUrl),
+                        mobileWebUrl: URL(string:imageLinkUrl))
+
+        let button = Button(title: buttonTitle, link: link)
+        let content = Content(title: title,
+                              imageUrl: URL(string:imageUrl)!,
+                              imageWidth: imageWidth,
+                              imageHeight: imageHeight,
+                              description: description,
+                              link: link)
+        let feedTemplate = FeedTemplate(content: content, social: nil, buttons: [button])
+
+        if let feedTemplateJsonData = (try? SdkJSONEncoder.custom.encode(feedTemplate)) {
+            if let templateJsonObject = SdkUtils.toJsonObject(feedTemplateJsonData) {
+                ShareApi.shared.shareDefault(templateObject:templateJsonObject) {(linkResult, error) in
+                    if let error = error {
+                        print(error)
+                        call.reject("error")
+                    }
+                    else {
+                        guard let linkResult = linkResult else { return }
+                        UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
+
+                        call.resolve()
+                    }
+                }
+            }
+        }
+    }
+
     @objc public func getUserInfo(_ call: CAPPluginCall) -> Void {
         UserApi.shared.me() {(user, error) in
             if let error = error {

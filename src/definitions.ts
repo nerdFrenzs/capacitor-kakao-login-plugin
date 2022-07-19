@@ -10,4 +10,13 @@ export interface KakaoLoginPlugin {
     "tokenType": string}>;
   goLogout(): Promise<any>;
   getUserInfo(): Promise<{ value: any }>;
+  sendLinkFeed(options: {
+    title: string;
+    description: string;
+    imageUrl: string;
+    imageLinkUrl: string;
+    buttonTitle: string;
+    imageWidth?: number;
+    imageHeight?: number;
+  }): Promise<void>;
 }
