@@ -1,7 +1,7 @@
 {
   "name": "capacitor-kakao-login-plugin",
-  "version": "1.2.2",
-  "description": "You can use this for Capacitor",
+  "version": "1.2.4",
+  "description": "This plugin is only used in Native capacitor(not web implemented)",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",

@@ -48,45 +48,50 @@ public class KakaoLoginPlugin: CAPPlugin {
     }
 
     @objc public func sendLinkFeed(_ call: CAPPluginCall) -> Void {
+        if ShareApi.isKakaoTalkSharingAvailable() {
+            let title = call.getString("title") ?? ""
+            let description = call.getString("description") ?? ""
+            let imageUrl = call.getString("imageUrl") ?? ""
+            let imageLinkUrl = call.getString("imageLinkUrl") ?? ""
+            let buttonTitle = call.getString("buttonTitle") ?? ""
+            let imageWidth: Int? = call.getInt("imageWidth")
+            let imageHeight: Int? = call.getInt("imageHeight")
 
-        let title = call.getString("title") ?? ""
-        let description = call.getString("description") ?? ""
-        let imageUrl = call.getString("imageUrl") ?? ""
-        let imageLinkUrl = call.getString("imageLinkUrl") ?? ""
-        let buttonTitle = call.getString("buttonTitle") ?? ""
-        let imageWidth: Int? = call.getInt("imageWidth")
-        let imageHeight: Int? = call.getInt("imageHeight")
 
 
+            let link = Link(webUrl: URL(string:imageLinkUrl)!,
+                            mobileWebUrl: URL(string:imageLinkUrl)!)
 
-        let link = Link(webUrl: URL(string:imageLinkUrl),
-                        mobileWebUrl: URL(string:imageLinkUrl))
+            let button = Button(title: buttonTitle, link: link)
+            let content = Content(title: title,
+                                  imageUrl: URL(string:imageUrl)!,
+                                  imageWidth: imageWidth,
+                                  imageHeight: imageHeight,
+                                  description: description,
+                                  link: link)
+            let feedTemplate = FeedTemplate(content: content, social: nil, buttons: [button])
 
-        let button = Button(title: buttonTitle, link: link)
-        let content = Content(title: title,
-                              imageUrl: URL(string:imageUrl)!,
-                              imageWidth: imageWidth,
-                              imageHeight: imageHeight,
-                              description: description,
-                              link: link)
-        let feedTemplate = FeedTemplate(content: content, social: nil, buttons: [button])
+            if let feedTemplateJsonData = (try? SdkJSONEncoder.custom.encode(feedTemplate)) {
+                if let templateJsonObject = SdkUtils.toJsonObject(feedTemplateJsonData) {
+                    ShareApi.shared.shareDefault(templateObject:templateJsonObject) {(linkResult, error) in
+                        if let error = error {
+                            print(error)
+                            call.reject("error")
+                        }
+                        else {
+                            guard let linkResult = linkResult else { return }
+                            UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
 
-        if let feedTemplateJsonData = (try? SdkJSONEncoder.custom.encode(feedTemplate)) {
-            if let templateJsonObject = SdkUtils.toJsonObject(feedTemplateJsonData) {
-                ShareApi.shared.shareDefault(templateObject:templateJsonObject) {(linkResult, error) in
-                    if let error = error {
-                        print(error)
-                        call.reject("error")
-                    }
-                    else {
-                        guard let linkResult = linkResult else { return }
-                        UIApplication.shared.open(linkResult.url, options: [:], completionHandler: nil)
-
-                        call.resolve()
+                            call.resolve()
+                        }
                     }
                 }
             }
+        } else {
+            print(error)
+            call.reject("no-installed")
         }
+
     }
 
     @objc public func getUserInfo(_ call: CAPPluginCall) -> Void {

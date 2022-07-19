@@ -7,4 +7,5 @@ CAP_PLUGIN(KakaoLoginPlugin, "KakaoLoginPlugin",
            CAP_PLUGIN_METHOD(goLogin, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(goLogout, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getUserInfo, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(sendLinkFeed, CAPPluginReturnPromise);
 )

@@ -26,7 +26,7 @@ npx cap sync
 ### goLogin()
 
 ```typescript
-goLogin() => any
+goLogin() => any // (with openId if you set in console) 
 ```
 
 **Returns:** <code>any</code>
