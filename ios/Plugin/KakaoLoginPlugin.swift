@@ -88,7 +88,6 @@ public class KakaoLoginPlugin: CAPPlugin {
                 }
             }
         } else {
-            print(error)
             call.reject("no-installed")
         }
 
