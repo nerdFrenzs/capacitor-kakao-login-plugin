@@ -16,13 +16,16 @@ import com.kakao.sdk.common.model.KakaoSdkError
 import com.kakao.sdk.user.UserApi
 import com.kakao.sdk.user.UserApiClient
 import com.google.gson.Gson
+import com.kakao.sdk.common.util.KakaoCustomTabsClient
 import com.kakao.sdk.template.model.FeedTemplate
 import com.kakao.sdk.share.ShareClient
 import com.kakao.sdk.share.model.SharingResult
+import com.kakao.sdk.talk.TalkApiClient
 import com.kakao.sdk.template.model.Button
 import com.kakao.sdk.template.model.Content
 import com.kakao.sdk.template.model.Link
 import org.json.JSONArray
+import java.lang.Exception
 
 val gson = Gson()
 
@@ -61,6 +64,21 @@ class KakaoLoginPlugin : Plugin() {
             UserApiClient.instance.loginWithKakaoTalk(context, callback = callback)
         } else {
             UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+        }
+    }
+    @PluginMethod
+    fun talkInChannel(call: PluginCall) {
+        try {
+            val publicId: String = call.getString("publicId") ?: ""
+            if(publicId != "") {
+                val url = TalkApiClient.instance.channelChatUrl(publicId)
+                KakaoCustomTabsClient.openWithDefault(context, url)
+                call.resolve()
+            } else {
+                call.reject("채팅 보내기 실")
+            }
+        } catch (e: Exception) {
+           call.reject(e.toString());
         }
     }
     @PluginMethod

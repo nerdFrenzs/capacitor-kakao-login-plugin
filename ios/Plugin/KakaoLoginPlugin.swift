@@ -6,6 +6,7 @@ import KakaoSDKShare
 import KakaoSDKTemplate
 import KakaoSDKAuth
 import KakaoSDKTalk
+import SafariServices
 
 
 /**
@@ -24,6 +25,7 @@ extension Encodable {
 
 @objc(KakaoLoginPlugin)
 public class KakaoLoginPlugin: CAPPlugin {
+    private var safariViewController: SFSafariViewController?
     func parseOAuthToken(oauthToken: OAuthToken) -> [String: Any] {
         var oauthTokenInfos: [String: Any] = [
             "success": true,
@@ -46,7 +48,27 @@ public class KakaoLoginPlugin: CAPPlugin {
         }
         return oauthTokenInfos
     }
-
+    func presentSafari(url: URL,
+                           completion: @escaping (Bool) -> Void) -> Void {
+            let queue = DispatchQueue(label: "KakaoChannel")
+            self.safariViewController = SFSafariViewController(url: url)
+            self.safariViewController?.modalTransitionStyle = .crossDissolve
+            self.safariViewController?.modalPresentationStyle = .overCurrentContext
+            
+            queue.async {
+                UIApplication.shared.open(url,
+                                          options: [:],
+                                          completionHandler: { (success) in
+                                            completion(success)
+                                          })
+            }
+        }
+    @objc public func talkInChannel(_ call: CAPPluginCall) -> Void {
+        let url: URL? = TalkApi.shared.makeUrlForChannelChat(channelPublicId: call.getString("publicId") ?? "" as String)
+               self.presentSafari(url: url!, completion: { success in
+                   call.resolve()
+               })
+    }
     @objc public func sendLinkFeed(_ call: CAPPluginCall) -> Void {
         if ShareApi.isKakaoTalkSharingAvailable() {
             let title = call.getString("title") ?? ""

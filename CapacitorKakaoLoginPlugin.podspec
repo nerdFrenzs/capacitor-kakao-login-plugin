@@ -18,6 +18,7 @@ Pod::Spec.new do |s|
   s.dependency 'KakaoSDKUser'
   s.dependency 'KakaoSDKTalk'
   s.dependency 'KakaoSDKShare'
+  s.dependency 'KakaoSDKStory'
   s.dependency 'KakaoSDKTemplate'
   s.swift_version = '5.1'
 end

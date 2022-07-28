@@ -1,6 +1,7 @@
-# capacitor-kakaotalk-login
+# capacitor-kakao-login-plguin
 
 You can use this for Capacitor
+( Only Native )
 
 ## Install
 
@@ -17,6 +18,7 @@ npx cap sync
 * [`goLogout()`](#gologout)
 * [`getUserInfo()`](#getuserinfo)
 * [`sendLinkFeed(...)`](#sendlinkfeed)
+* [`talkInChannel(...)`](#talkInChannel)
 
 </docgen-index>
 
@@ -65,6 +67,20 @@ sendLinkFeed(options: { title: string; description: string; imageUrl: string; im
 | Param         | Type                                                                                                                                                         |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **`options`** | <code>{ title: string; description: string; imageUrl: string; imageLinkUrl: string; buttonTitle: string; imageWidth?: number; imageHeight?: number; }</code> |
+
+**Returns:** <code>any</code>
+
+--------------------
+
+### talkInChannel(...)
+
+```typescript
+talkInChannel(publicId: string) => any
+```
+
+| Param         | Type   |
+| ------------- |--------|
+| **`publicId`** | string |
 
 **Returns:** <code>any</code>
 
