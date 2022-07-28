@@ -19,5 +19,7 @@ export interface KakaoLoginPlugin {
     imageWidth?: number;
     imageHeight?: number;
   }): Promise<void>;
-  talkInChannel(publicId: string): Promise<any>;
+  talkInChannel(options: {
+    publicId: string;
+  }): Promise<any>;
 }

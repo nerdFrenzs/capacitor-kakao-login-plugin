@@ -75,7 +75,8 @@ class KakaoLoginPlugin : Plugin() {
                 KakaoCustomTabsClient.openWithDefault(context, url)
                 call.resolve()
             } else {
-                call.reject("채팅 보내기 실")
+                Log.e(TAG, publicId)
+                call.reject("채팅 보내기 실패")
             }
         } catch (e: Exception) {
            call.reject(e.toString());

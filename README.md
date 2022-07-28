@@ -75,12 +75,12 @@ sendLinkFeed(options: { title: string; description: string; imageUrl: string; im
 ### talkInChannel(...)
 
 ```typescript
-talkInChannel(publicId: string) => any
+talkInChannel(options: { publicId: string; }) => any
 ```
 
-| Param         | Type   |
-| ------------- |--------|
-| **`publicId`** | string |
+| Param         | Type                               |
+| ------------- |------------------------------------|
+| **`options`** | <code>{ publicId: string; }</code> |
 
 **Returns:** <code>any</code>
 
