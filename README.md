@@ -3,6 +3,11 @@
 You can use this for Capacitor
 ( Only Native )
 
+!! WARNING !!
+UPPER 1.3.x Version is for Capacitor 5
+
+if you want capacitor 4 plugin, use 1.2.x
+
 ## Install
 
 ```bash
