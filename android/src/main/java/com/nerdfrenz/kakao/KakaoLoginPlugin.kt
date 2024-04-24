@@ -41,9 +41,8 @@ class KakaoLoginPlugin : Plugin() {
         token.idToken?.let {
                tokenInfos.putSafe("idToken", token.idToken);
         }
-        token.refreshTokenExpiresAt?.let {
-            tokenInfos.putSafe("refreshTokenExpiresAt", it.toString());
-        }
+        tokenInfos.putSafe("refreshTokenExpiresAt", token.refreshTokenExpiresAt.toString());
+
         return tokenInfos
     }
 
@@ -71,7 +70,7 @@ class KakaoLoginPlugin : Plugin() {
         try {
             val publicId: String = call.getString("publicId") ?: ""
             if(publicId != "") {
-                val url = TalkApiClient.instance.channelChatUrl(publicId)
+                val url = TalkApiClient.instance.chatChannelUrl(publicId)
                 KakaoCustomTabsClient.openWithDefault(context, url)
                 call.resolve()
             } else {
@@ -137,7 +136,7 @@ class KakaoLoginPlugin : Plugin() {
             if (error != null) {
                 call.reject("로그아웃 실패")
             } else {
-                call.success()
+                call.resolve()
             }
         }
     }
