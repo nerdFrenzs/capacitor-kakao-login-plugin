@@ -21,6 +21,7 @@ npx cap sync
 
 <docgen-index>
 
+* [`initForWeb()`](#initForWeb)
 * [`goLogin()`](#gologin)
 * [`goLogout()`](#gologout)
 * [`getUserInfo()`](#getuserinfo)
@@ -31,6 +32,20 @@ npx cap sync
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### initForWeb()
+
+```typescript
+initForWeb(appkey) => Promise<void>
+```
+
+| Param        |                                       Type                                       |
+|--------------|:--------------------------------------------------------------------------------:|
+| **`appkey`** | <code>string</code> <br/> Your JavaScript api key (from Kakao developer console) |
+
+**Returns:** <code>Promise</code>
+
+--------------------
 
 ### goLogin()
 
@@ -95,6 +110,11 @@ talkInChannel(options: { publicId: string; }) => any
 
 
 ## Settings
+
+### Web
+
+- Before the plugin can be used `initForWeb()` must be called your with your JavaScript `appkey`
+- After `initForWeb()` resolves the other methods can be used. 
 
 ### Android
 
