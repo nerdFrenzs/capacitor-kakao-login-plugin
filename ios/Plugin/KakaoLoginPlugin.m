@@ -9,4 +9,5 @@ CAP_PLUGIN(KakaoLoginPlugin, "KakaoLoginPlugin",
            CAP_PLUGIN_METHOD(getUserInfo, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(sendLinkFeed, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(talkInChannel, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(initForWeb, CAPPluginReturnPromise);
 )
