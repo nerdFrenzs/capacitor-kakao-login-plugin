@@ -24,5 +24,5 @@ export interface KakaoLoginPlugin {
     imageHeight?: number;
   }): Promise<void>;
   talkInChannel(options: { publicId: string }): Promise<any>;
-  initForWeb(appkey: string, redirectUrl: string): Promise<void>;
+  initForWeb(appkey: string): Promise<void>;
 }
