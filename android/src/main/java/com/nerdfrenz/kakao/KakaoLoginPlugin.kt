@@ -39,7 +39,7 @@ class KakaoLoginPlugin : Plugin() {
         tokenInfos.putSafe("expiredAt", token.accessTokenExpiresAt.toString());
         tokenInfos.putSafe("refreshToken", token.refreshToken);
         token.idToken?.let {
-               tokenInfos.putSafe("idToken", token.idToken);
+            tokenInfos.putSafe("idToken", token.idToken);
         }
         tokenInfos.putSafe("refreshTokenExpiresAt", token.refreshTokenExpiresAt.toString());
 
@@ -51,8 +51,7 @@ class KakaoLoginPlugin : Plugin() {
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
                 call.reject(error.toString());
-            }
-            else if (token != null) {
+            } else if (token != null) {
                 call.resolve(parseToken(token))
             } else {
                 call.reject("no_data")
@@ -65,11 +64,12 @@ class KakaoLoginPlugin : Plugin() {
             UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
         }
     }
+
     @PluginMethod
     fun talkInChannel(call: PluginCall) {
         try {
             val publicId: String = call.getString("publicId") ?: ""
-            if(publicId != "") {
+            if (publicId != "") {
                 val url = TalkApiClient.instance.chatChannelUrl(publicId)
                 KakaoCustomTabsClient.openWithDefault(context, url)
                 call.resolve()
@@ -78,9 +78,10 @@ class KakaoLoginPlugin : Plugin() {
                 call.reject("채팅 보내기 실패")
             }
         } catch (e: Exception) {
-           call.reject(e.toString());
+            call.reject(e.toString());
         }
     }
+
     @PluginMethod
     fun sendLinkFeed(call: PluginCall) {
         val imageLinkUrl = call.getString("imageLinkUrl")
@@ -97,18 +98,19 @@ class KakaoLoginPlugin : Plugin() {
         buttons.add(Button(buttonTitle, link))
         val feed = FeedTemplate(content, null, null, buttons)
         ShareClient.instance
-            .shareDefault(
-                    activity,
-                    feed
-            ) { linkResult: SharingResult?, error: Throwable? ->
-                if (error != null) {
-                    call.reject("kakao link failed: " + error.toString())
-                } else if (linkResult != null) {
-                    activity.startActivity(linkResult.intent)
+                .shareDefault(
+                        activity,
+                        feed
+                ) { linkResult: SharingResult?, error: Throwable? ->
+                    if (error != null) {
+                        call.reject("kakao link failed: " + error.toString())
+                    } else if (linkResult != null) {
+                        activity.startActivity(linkResult.intent)
+                    }
+                    call.resolve()
                 }
-                call.resolve()
-            }
     }
+
     @PluginMethod
     fun getUserInfo(call: PluginCall) {
         // 사용자 정보 요청 (기본)
@@ -116,8 +118,7 @@ class KakaoLoginPlugin : Plugin() {
             if (error != null) {
                 Log.e(TAG, "사용자 정보 요청 실패", error)
                 call.reject(error.toString());
-            }
-            else if (user != null) {
+            } else if (user != null) {
                 Log.i(TAG, "사용자 정보 요청 성공" +
                         "\n회원번호: ${user.id}" +
                         "\n이메일: ${user.kakaoAccount?.email}" +
@@ -130,6 +131,7 @@ class KakaoLoginPlugin : Plugin() {
             }
         }
     }
+
     @PluginMethod
     fun goLogout(call: PluginCall) {
         UserApiClient.instance.logout { error ->
@@ -139,6 +141,11 @@ class KakaoLoginPlugin : Plugin() {
                 call.resolve()
             }
         }
+    }
+
+    @PluginMethod
+    fun initForWeb(call: PluginCall) {
+        call.unimplemented("Not implemented on Android.")
     }
 }
 

@@ -173,5 +173,9 @@ public class KakaoLoginPlugin: CAPPlugin {
             }
         }
     }
+
+    @objc func initForWeb(_ call: CAPPluginCall) {
+        call.unimplemented("Not implemented on iOS.")
+    }
 }
 
