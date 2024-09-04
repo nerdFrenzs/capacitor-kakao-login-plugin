@@ -82,7 +82,7 @@ export class KakaoLoginPluginWeb extends WebPlugin implements KakaoLoginPlugin {
 
   public initForWeb = async (appkey: string): Promise<void> => {
     try {
-      await this.loadSDK(appkey);
+      await this.loadSDK();
       this.testSDK();
       if (!this.hasInit) {
         window.Kakao?.init(appkey);
@@ -176,7 +176,7 @@ export class KakaoLoginPluginWeb extends WebPlugin implements KakaoLoginPlugin {
     });
   }
 
-  private loadSDK = (_appkey: string) => {
+  private loadSDK = () => {
     return new Promise<void | Event>((resolve, reject) => {
       if (document.getElementById('kakao-script')) {
         return resolve();
