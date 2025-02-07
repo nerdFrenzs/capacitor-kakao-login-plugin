@@ -1,21 +1,24 @@
-# capacitor-kakao-login-plguin
+markdown
+Copy
+# 🚀 Capacitor Kakao Login Plugin
 
-You can use this for Capacitor
-( Only Native )
+> Official **Kakao Login Plugin** for Capacitor. Supports Android, iOS & Web environments.  
+> Fully compatible with **Capacitor 7** ✅ | Optimized for latest SDK versions 🔥
 
-!! WARNING !!
-UPPER 2.0.x Version is for Capcaitor 6
-
-if you want capacitor 5 plugin, use 1.3.x
-
-if you want capacitor 4 plugin, use 1.2.x
-
-## Install
+## 📦 Install
 
 ```bash
 npm i capacitor-kakao-login-plugin
 npx cap sync
 ```
+
+
+| Version     |  Platform   |
+|-------------|:-----------:|
+| **`3.0.x`** | Capacitor 7 |
+| **`2.0.x`** | Capacitor 6 |
+| **`1.3.x`** | Capacitor 5 |
+| **`1.2.x`** | Capacitor 4 |
 
 ## API
 
