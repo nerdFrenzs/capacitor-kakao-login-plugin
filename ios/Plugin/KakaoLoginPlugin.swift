@@ -24,7 +24,18 @@ extension Encodable {
 }
 
 @objc(KakaoLoginPlugin)
-public class KakaoLoginPlugin: CAPPlugin {
+public class KakaoLoginPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "KakaoLoginPlugin"
+    public let jsName = "KakaoLoginPlugin"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "goLogin", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "goLogout", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getUserInfo", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "sendLinkFeed", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "talkInChannel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "initForWeb", returnType: CAPPluginReturnPromise)
+    ]
+
     private var safariViewController: SFSafariViewController?
     func parseOAuthToken(oauthToken: OAuthToken) -> [String: Any] {
         var oauthTokenInfos: [String: Any] = [
