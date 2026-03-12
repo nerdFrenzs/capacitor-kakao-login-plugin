@@ -3,7 +3,7 @@ Copy
 # 🚀 Capacitor Kakao Login Plugin
 
 > Official **Kakao Login Plugin** for Capacitor. Supports Android, iOS & Web environments.  
-> Fully compatible with **Capacitor 7** ✅ | Optimized for latest SDK versions 🔥
+> Fully compatible with **Capacitor 8** ✅ | Optimized for latest SDK versions 🔥
 
 ## 📦 Install
 
@@ -12,9 +12,30 @@ npm i capacitor-kakao-login-plugin
 npx cap sync
 ```
 
+### iOS: Kakao SDK (SPM)
+
+이 플러그인은 **Kakao iOS SDK 2.23.0+** 를 사용합니다.
+
+- **앱이 iOS를 SPM으로 사용하는 경우**  
+  (`npx cap add ios --packagemanager SPM` 으로 만든 프로젝트)  
+  **별도 작업 없이** `npx cap sync` 만 하면 Kakao SDK가 플러그인 의존성으로 자동 추가됩니다.
+
+- **앱이 iOS를 CocoaPods으로 사용하는 경우**  
+  (기존 `ios` 폴더에 Podfile이 있는 프로젝트)  
+  CocoaPods에는 Kakao 2.23+ 가 없으므로, **앱의 Xcode 프로젝트에서만** Kakao SDK를 SPM으로 수동 추가해야 합니다.  
+  1. Xcode에서 `ios/App/App.xcodeproj` 열기  
+  2. **Project** → **Package Dependencies** → **[+]**  
+  3. URL 입력: `https://github.com/kakao/kakao-ios-sdk`  
+  4. **Dependency Rule**: Branch → `master` 후 **Add Package**  
+  5. **Add to Target**에서 앱 타겟 선택 후 아래 제품 선택:  
+     `KakaoSDKCommon`, `KakaoSDKAuth`, `KakaoSDKUser`, `KakaoSDKTalk`, `KakaoSDKShare`, `KakaoSDKTemplate`
+
+이후 아래 **IOS** 설정(Info.plist, AppDelegate)을 진행하세요.
+
 
 | Version     |  Platform   |
 |-------------|:-----------:|
+| **`4.0.x`** | Capacitor 8 |
 | **`3.0.x`** | Capacitor 7 |
 | **`2.0.x`** | Capacitor 6 |
 | **`1.3.x`** | Capacitor 5 |
@@ -210,6 +231,8 @@ public class MainActivity extends BridgeActivity {
 
 
 ### IOS
+
+- **Kakao iOS SDK**는 위 **"iOS: Kakao SDK (SPM)"** 절차대로 SPM으로 추가해야 합니다.
 
 - Add kakao values and schemes to `info.plist`
 
